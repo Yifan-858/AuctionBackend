@@ -8,6 +8,8 @@ namespace AuctionBackend.Data.Profiles
     {
        public AuctionProfile()
         {
+            CreateMap<Auction, AuctionCreateDto>();
+
             CreateMap<Auction, AuctionOpenDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(org => org.User.UserName))
                 .ForMember(dest => dest.HighestBid, opt => opt.MapFrom(src => src.Bids != null && src.Bids.Any()
@@ -32,6 +34,8 @@ namespace AuctionBackend.Data.Profiles
                     ? src.Bids.Max(b => b.BidAmount)
                     : (decimal?)null))
                 .ForMember(dest => dest.IsOpen, opt => opt.MapFrom(_=>false));
+
+            
         }
     }
 }

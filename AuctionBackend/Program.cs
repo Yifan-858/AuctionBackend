@@ -1,5 +1,8 @@
+using AuctionBackend.Core.Interfaces;
+using AuctionBackend.Core.Services;
 using AuctionBackend.Data;
 using AuctionBackend.Data.Interfaces;
+using AuctionBackend.Data.Profiles;
 using AuctionBackend.Data.Repos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +24,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile).Assembly);
 
 builder.Services.AddSwaggerGen();
 
@@ -46,12 +49,21 @@ builder.Services.AddAuthentication(opt => {
    });
 
 builder.Services.AddScoped<IAuctionRepo, AuctionRepo>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IAuctionService, AuctionService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI(endpoint =>
+{
+endpoint.SwaggerEndpoint("/swagger/v1/swagger.json", "My API dok");
+});
 
 app.UseEndpoints(endpoints => {  endpoints.MapControllers(); });
 
