@@ -50,7 +50,9 @@ builder.Services.AddAuthentication(opt => {
 
 builder.Services.AddScoped<IAuctionRepo, AuctionRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IBidRepo, BidRepo>();
 builder.Services.AddScoped<IAuctionService, AuctionService>();
+builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

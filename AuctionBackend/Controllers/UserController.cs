@@ -34,5 +34,18 @@ namespace AuctionBackend.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto login)
+        {
+            try
+            {
+                var user = await _userService.Login(login);
+                var token = _userService.GenerateToken(user);
+                return Ok(token);
+            }
+            catch (Exception ex)
+            { return Unauthorized($"Invalid login: {ex}"); }
+        }
+
     }
 }

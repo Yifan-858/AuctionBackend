@@ -1,8 +1,13 @@
 ﻿using AuctionBackend.Core.Interfaces;
 using AuctionBackend.Data.DTO;
+using AuctionBackend.Data.Entities;
 using AuctionBackend.Data.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AuctionBackend.Core.Services
 {
@@ -31,6 +36,51 @@ namespace AuctionBackend.Core.Services
             var user = await _userRepo.CreateUser(signupDto.UserName, signupDto.Email, passwordHash);
 
             return user.UserName;
+        }
+        public string GenerateToken(User user)
+        {
+            var key = _configuration["Jwt:Key"];
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
+
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Role,"User"));
+                
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+            var tokenOptions = new JwtSecurityToken(
+                     issuer: issuer,
+                     audience: audience, 
+                     claims: claims, 
+                     expires: DateTime.UtcNow.AddMinutes(20), 
+                     signingCredentials: signinCredentials);
+
+     
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+            return tokenString;
+        }
+
+        public async Task<User> Login([FromBody] LoginDto login)
+        {
+            User? user = await _userRepo.GetUserByEmail(login.Email);
+
+            if(user == null)
+            {
+                throw new Exception("Invalid login.");
+            }
+
+            var hashedPassword = login.Password + "Hash";
+
+            if(user.PasswordHash != hashedPassword)
+            {
+                throw new Exception("Invalid login.");
+            }
+
+            return user;
         }
     }
 }
