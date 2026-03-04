@@ -9,5 +9,8 @@ namespace AuctionBackend.Core.Interfaces
         Task<string> RegisterUser([FromBody] SignupDto signupDto);
         string GenerateToken(User user);
         Task<User> Login([FromBody] LoginDto login);
+        Task<User> GetUserById(int userId);
+        Task<User> UpdateUserPassword(int userId, string newPassword);
+        Task DeleteUser(int userId);
     }
 }

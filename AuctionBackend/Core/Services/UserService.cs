@@ -82,5 +82,29 @@ namespace AuctionBackend.Core.Services
 
             return user;
         }
+
+        public async Task<User> GetUserById(int userId)
+        {
+            return await _userRepo.GetUserById(userId);
+        }
+
+        public async Task<User> UpdateUserPassword(int userId, string newPassword)
+        {
+            var newPasswordHash = newPassword + "Hash";
+            var user = await _userRepo.UpdateUserPassword(userId, newPasswordHash);
+
+            return user;
+        }
+
+        public async Task DeleteUser(int userId)
+        {
+            var user = await _userRepo.GetUserById(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            await _userRepo.DeleteUser(user);
+        }
     }
 }

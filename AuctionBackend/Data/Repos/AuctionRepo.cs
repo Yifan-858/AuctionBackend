@@ -53,7 +53,7 @@ namespace AuctionBackend.Data.Repos
             return auctions;
         }
 
-         public async Task<Auction> UpdateAuction(int auctionId, string? title, string? description, decimal? startPrice)
+        public async Task<Auction> UpdateAuction(int auctionId, string? title, string? description, decimal? startPrice)
         {
             var auction = await _appDbContext.Auctions.FindAsync(auctionId);//search for primary key
 
@@ -61,10 +61,7 @@ namespace AuctionBackend.Data.Repos
             {
                 throw new KeyNotFoundException($"Auction id{auctionId} not found");
             }
-            else if(auction.Bids != null && auction.Bids.Count > 0)
-            {
-                throw new Exception($"Cannot delete auction id{auctionId}. It has bids already.");
-            }
+            
 
             if(!string.IsNullOrEmpty(title))
             {
@@ -76,9 +73,17 @@ namespace AuctionBackend.Data.Repos
                 auction.Description = description;
             }
 
-            if(startPrice > 0)
+            if (startPrice.HasValue)
             {
-                auction.StartPrice = (decimal)startPrice;
+                if(auction.Bids != null && auction.Bids.Any(b => !b.IsDeleted))
+                {
+                    throw new Exception($"Cannot update the start price, auction id{auctionId} has bids already.");
+                }
+
+                if (startPrice.Value <= 0)
+                {
+                    throw new Exception("Start price must be greater than 0.");
+                }
             }
 
             await _appDbContext.SaveChangesAsync();

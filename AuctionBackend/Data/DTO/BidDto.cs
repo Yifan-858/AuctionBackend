@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public decimal BidAmount { get; set; } 
         public DateTime CreatedAtUtc { get; set; }
+        public int UserId {  get; set; }
         public string UserName { get; set; }
         public int AuctionId { get; set; }
     }

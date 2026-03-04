@@ -32,7 +32,7 @@ namespace AuctionBackend.Data.Repos
             return await _appDbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> UpdateUserPassword(int id, string? email, string? passwordHash)
+        public async Task<User> UpdateUserPassword(int id, string passwordHash)
         {
             var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
 

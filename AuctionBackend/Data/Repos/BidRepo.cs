@@ -40,9 +40,9 @@ namespace AuctionBackend.Data.Repos
            
         }
 
-        public async Task<List<Bid>> GetBidsByAuction(int postId)
+        public async Task<List<Bid>> GetBidsByAuction(int auctionId)
         { 
-            return await _appDbContext.Bids.Where(b=> b.AuctionId == postId).ToListAsync();
+            return await _appDbContext.Bids.Where(b=> b.AuctionId == auctionId).ToListAsync();
         }
 
         public async Task<bool> DeleteBid(int bidId)
