@@ -87,7 +87,6 @@ namespace AuctionBackend.Controllers
             try
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                // service will validate ownership on delete; for update we rely on repo/service rules
                 var updated = await _auctionService.UpdateAuction(id, dto.Title, dto.Description, dto.StartPrice);
                 return Ok(updated);
             }
@@ -105,7 +104,7 @@ namespace AuctionBackend.Controllers
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 await _auctionService.DeleteAuction(id, userId);
-                return NoContent();
+                return Ok($"Auction deleted!");
             }
             catch (Exception ex)
             {

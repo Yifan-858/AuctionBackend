@@ -74,7 +74,7 @@ namespace AuctionBackend.Core.Services
             return auctionDto;
         }
 
-        public async Task DeleteAuction(int auctionId, int userId)
+        public async Task<bool> DeleteAuction(int auctionId, int userId)
         {
             var currentAuction = await _auctionRepo.GetAuctionById(auctionId);
 
@@ -89,6 +89,7 @@ namespace AuctionBackend.Core.Services
             }
 
             await _auctionRepo.DeleteAuction(auctionId);
+            return true;
         }
     }
 }

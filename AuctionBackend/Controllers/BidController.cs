@@ -61,8 +61,8 @@ namespace AuctionBackend.Controllers
             try
             {
                 var result = await _bidService.DeleteBid(id);
-                if (result) return NoContent();
-                return BadRequest("Failed to delete bid");
+                if (result) return Ok($"The bid is deleted!");
+                return BadRequest("Failed to delete bid.");
             }
             catch (Exception ex)
             {

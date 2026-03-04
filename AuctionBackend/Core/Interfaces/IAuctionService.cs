@@ -15,6 +15,6 @@ namespace AuctionBackend.Core.Interfaces
        
         Task<AuctionDto> UpdateAuction(int auctionId, string? title, string? description, decimal? startPrice);
  
-        Task DeleteAuction(int auctionId, int userId);
+        Task<bool> DeleteAuction(int auctionId, int userId);
     }
 }

@@ -17,7 +17,7 @@ namespace AuctionBackend.Data.DTO
         public string UserName { get; set; }
 
         public int BidCount { get; set; }
-        public List<Bid>? Bids { get; set; } = new();
+        public List<BidDto>? Bids { get; set; } = new();
 
         public bool IsActive { get; set; }
         public bool IsOpen { get; set; }

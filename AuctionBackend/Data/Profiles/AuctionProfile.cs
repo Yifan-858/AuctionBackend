@@ -27,7 +27,10 @@ namespace AuctionBackend.Data.Profiles
                                                                           src.EndDateUtc > DateTime.UtcNow))
                 .ForMember(dest => dest.BidCount, opt => opt.MapFrom(src => src.Bids != null 
                                                            ? src.Bids.Count(b => !b.IsDeleted) 
-                                                           : 0));
+                                                           : 0))
+                .ForMember(dest => dest.Bids, opt => opt.MapFrom(src => src.Bids != null 
+                                                ? src.Bids.Where(b => !b.IsDeleted)
+                                                : new List<Bid>()));
         }
     }
 }

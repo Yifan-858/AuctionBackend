@@ -23,6 +23,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
+builder.Services.AddCors();
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile).Assembly);
 
@@ -56,7 +57,16 @@ builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
+
+var origins = builder.Configuration.GetSection("Origins").Get<string[]>();
+
 app.UseRouting();
+
+app.UseCors(options =>
+    options.WithOrigins(origins)
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
 
 app.UseAuthentication();
 app.UseAuthorization();
