@@ -43,7 +43,7 @@ namespace AuctionBackend.Controllers
             {
                 var user = await _userService.Login(login);
                 var token = _userService.GenerateToken(user);
-                return Ok(token);
+                return Ok(new { token, user = new { user.Id, user.UserName, user.Email } });
             }
             catch (Exception ex)
             { return Unauthorized($"Invalid login: {ex}"); }

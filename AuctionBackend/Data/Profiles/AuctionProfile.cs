@@ -23,7 +23,6 @@ namespace AuctionBackend.Data.Profiles
                             ? src.Bids.Where(b => !b.IsDeleted).Max(b => (decimal?)b.BidAmount)
                             : (decimal?)null)))
                 .ForMember(dest => dest.IsOpen, opt => opt.MapFrom(src => src.IsActive && 
-                                                                          src.StartDateUtc <= DateTime.UtcNow &&
                                                                           src.EndDateUtc > DateTime.UtcNow))
                 .ForMember(dest => dest.BidCount, opt => opt.MapFrom(src => src.Bids != null 
                                                            ? src.Bids.Count(b => !b.IsDeleted) 

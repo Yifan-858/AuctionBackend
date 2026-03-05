@@ -38,7 +38,10 @@ namespace AuctionBackend.Data.Repos
 
         public async Task<Auction> GetAuctionById(int auctionId)
         {
-            return await _appDbContext.Auctions.SingleOrDefaultAsync(a=> a.Id == auctionId);
+            return await _appDbContext.Auctions
+                        .Include(a=>a.User)
+                        .Include(a=> a.Bids)
+                        .SingleOrDefaultAsync(a=> a.Id == auctionId);
         }
 
         public async Task<List<Auction>> GetAuctionsByTitle(string title)
